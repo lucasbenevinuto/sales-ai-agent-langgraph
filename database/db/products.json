@@ -1,72 +1,72 @@
 [
     {
-        "product_name": "Banana",
-        "category": "Frutas",
-        "description": "Banana madura, doce e rica em potássio.",
+        "product_name": "Gala Apples",
+        "description": "Sweet and crisp Gala apples, perfect for snacking.",
+        "category": "Produce",
         "price": 1.99,
-        "quantity": 150
+        "quantity": 100
     },
     {
-        "product_name": "Arroz",
-        "category": "Grãos",
-        "description": "Arroz branco tipo 1, ideal para refeições.",
-        "price": 4.99,
+        "product_name": "Ripe Bananas",
+        "description": "Fresh, ripe bananas, a good source of potassium.",
+        "category": "Produce",
+        "price": 0.50,
         "quantity": 50
     },
     {
-        "product_name": "Leite",
-        "category": "Laticínios",
-        "description": "Leite integral pasteurizado, fresco e nutritivo.",
-        "price": 3.49,
-        "quantity": 200
+        "product_name": "Navel Oranges",
+        "description": "Juicy and seedless Navel oranges, rich in Vitamin C.",
+        "category": "Produce",
+        "price": 0.75,
+        "quantity": 75
     },
     {
-        "product_name": "Tomate",
-        "category": "Legumes",
-        "description": "Tomate vermelho, ideal para saladas e molhos.",
-        "price": 2.89,
-        "quantity": 120
-    },
-    {
-        "product_name": "Pão de forma",
-        "category": "Padaria",
-        "description": "Pão de forma branco, macio e delicioso.",
-        "price": 5.99,
-        "quantity": 80
-    },
-    {
-        "product_name": "Ovos",
-        "category": "Granja",
-        "description": "Ovos de galinha, frescos e de qualidade.",
-        "price": 7.99,
+        "product_name": "Strawberries",
+        "description": "Sweet and juicy strawberries, perfect for desserts and snacks.",
+        "category": "Produce",
+        "price": 3.99,
         "quantity": 60
     },
     {
-        "product_name": "Café",
-        "category": "Bebidas",
-        "description": "Café torrado e moído, sabor encorpado.",
-        "price": 9.99,
+        "product_name": "Avocados",
+        "description": "Creamy and nutritious avocados, a good source of healthy fats.",
+        "category": "Produce",
+        "price": 1.50,
         "quantity": 40
     },
     {
-        "product_name": "Azeite de oliva",
-        "category": "Óleos",
-        "description": "Azeite de oliva extra virgem, rico em sabor.",
-        "price": 15.99,
+        "product_name": "Red Grapes",
+        "description": "Sweet and crisp red grapes, perfect for snacking.",
+        "category": "Produce",
+        "price": 2.99,
         "quantity": 30
     },
     {
-        "product_name": "Alface",
-        "category": "Verduras",
-        "description": "Alface americana, fresca e crocante.",
-        "price": 1.79,
-        "quantity": 70
+        "product_name": "Blueberries",
+        "description": "Fresh blueberries, packed with antioxidants.",
+        "category": "Produce",
+        "price": 4.99,
+        "quantity": 80
     },
     {
-        "product_name": "Iogurte",
-        "category": "Laticínios",
-        "description": "Iogurte natural cremoso, fonte de probióticos.",
-        "price": 2.49,
+        "product_name": "Lemons",
+        "description": "Tart and juicy lemons, perfect for cooking and drinks.",
+        "category": "Produce",
+        "price": 0.60,
         "quantity": 90
+    },
+    {
+        "product_name": "Watermelon",
+        "description": "Sweet and refreshing watermelon, perfect for summer.",
+        "category": "Produce",
+        "price": 5.99,
+        "quantity": 55
+    },
+    {
+        "product_name": "Pineapple",
+        "description": "Tropical pineapple, sweet and juicy.",
+        "category": "Produce",
+        "price": 3.50,
+        "quantity": 65
     }
 ]
