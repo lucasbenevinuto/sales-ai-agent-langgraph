@@ -1,11 +1,11 @@
-import sqlite3
 from datetime import datetime
 from decimal import Decimal
 from typing import Any, Dict, List, Optional, Union
 
 from langchain_core.runnables import RunnableConfig
 from langchain_core.tools import tool
-from utils import get_db_connection
+
+from database.db_manager import DatabaseManager
 
 
 @tool
@@ -30,7 +30,7 @@ def search_products(
     Example:
         search_products(query="banana", category="fruits", max_price=5.00)
     """
-    with get_db_connection() as conn:
+    with DatabaseManager.get_connection() as conn:
         cursor = conn.cursor()
 
         query_parts = ["SELECT * FROM products WHERE Quantity > 0"]
@@ -138,7 +138,7 @@ def create_order(
     if not customer_id:
         return ValueError("No customer ID configured.")
 
-    with get_db_connection() as conn:
+    with DatabaseManager.get_connection() as conn:
         cursor = conn.cursor()
         try:
             # Start transaction
@@ -231,7 +231,7 @@ def check_order_status(
     if not customer_id:
         raise ValueError("No customer ID configured.")
 
-    with get_db_connection() as conn:
+    with DatabaseManager.get_connection() as conn:
         cursor = conn.cursor()
 
         if order_id:
@@ -316,7 +316,7 @@ def search_products_recommendations(config: RunnableConfig) -> Dict[str, str]:
     if not customer_id:
         raise ValueError("No customer ID configured.")
 
-    with get_db_connection() as conn:
+    with DatabaseManager.get_connection() as conn:
         cursor = conn.cursor()
 
         # Get customer's previous purchases
