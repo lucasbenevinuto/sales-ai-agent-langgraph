@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS products (
     ProductName TEXT NOT NULL,
     Category TEXT NOT NULL,
     Description TEXT,
-    Price REAL NOT NULL CHECK(Price > 0),
+    Price DOUBLE NOT NULL CHECK(Price > 0),
     Quantity INTEGER NOT NULL CHECK(Quantity >= 0)
 );
 
