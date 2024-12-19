@@ -1,0 +1,72 @@
+[
+    {
+        "product_name": "Banana",
+        "category": "Frutas",
+        "description": "Banana madura, doce e rica em potássio.",
+        "price": 1.99,
+        "quantity": 150
+    },
+    {
+        "product_name": "Arroz",
+        "category": "Grãos",
+        "description": "Arroz branco tipo 1, ideal para refeições.",
+        "price": 4.99,
+        "quantity": 50
+    },
+    {
+        "product_name": "Leite",
+        "category": "Laticínios",
+        "description": "Leite integral pasteurizado, fresco e nutritivo.",
+        "price": 3.49,
+        "quantity": 200
+    },
+    {
+        "product_name": "Tomate",
+        "category": "Legumes",
+        "description": "Tomate vermelho, ideal para saladas e molhos.",
+        "price": 2.89,
+        "quantity": 120
+    },
+    {
+        "product_name": "Pão de forma",
+        "category": "Padaria",
+        "description": "Pão de forma branco, macio e delicioso.",
+        "price": 5.99,
+        "quantity": 80
+    },
+    {
+        "product_name": "Ovos",
+        "category": "Granja",
+        "description": "Ovos de galinha, frescos e de qualidade.",
+        "price": 7.99,
+        "quantity": 60
+    },
+    {
+        "product_name": "Café",
+        "category": "Bebidas",
+        "description": "Café torrado e moído, sabor encorpado.",
+        "price": 9.99,
+        "quantity": 40
+    },
+    {
+        "product_name": "Azeite de oliva",
+        "category": "Óleos",
+        "description": "Azeite de oliva extra virgem, rico em sabor.",
+        "price": 15.99,
+        "quantity": 30
+    },
+    {
+        "product_name": "Alface",
+        "category": "Verduras",
+        "description": "Alface americana, fresca e crocante.",
+        "price": 1.79,
+        "quantity": 70
+    },
+    {
+        "product_name": "Iogurte",
+        "category": "Laticínios",
+        "description": "Iogurte natural cremoso, fonte de probióticos.",
+        "price": 2.49,
+        "quantity": 90
+    }
+]
