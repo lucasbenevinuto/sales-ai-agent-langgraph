@@ -7,6 +7,8 @@ from langchain_core.tools import tool
 
 from database.db_manager import DatabaseManager
 
+db_manager = DatabaseManager()
+
 
 @tool
 def search_products(
@@ -30,7 +32,7 @@ def search_products(
     Example:
         search_products(query="banana", category="fruits", max_price=5.00)
     """
-    with DatabaseManager.get_connection() as conn:
+    with db_manager.get_connection() as conn:
         cursor = conn.cursor()
 
         query_parts = ["SELECT * FROM products WHERE Quantity > 0"]
@@ -138,7 +140,7 @@ def create_order(
     if not customer_id:
         return ValueError("No customer ID configured.")
 
-    with DatabaseManager.get_connection() as conn:
+    with db_manager.get_connection() as conn:
         cursor = conn.cursor()
         try:
             # Start transaction
@@ -231,7 +233,7 @@ def check_order_status(
     if not customer_id:
         raise ValueError("No customer ID configured.")
 
-    with DatabaseManager.get_connection() as conn:
+    with db_manager.get_connection() as conn:
         cursor = conn.cursor()
 
         if order_id:
@@ -316,7 +318,7 @@ def search_products_recommendations(config: RunnableConfig) -> Dict[str, str]:
     if not customer_id:
         raise ValueError("No customer ID configured.")
 
-    with DatabaseManager.get_connection() as conn:
+    with db_manager.get_connection() as conn:
         cursor = conn.cursor()
 
         # Get customer's previous purchases

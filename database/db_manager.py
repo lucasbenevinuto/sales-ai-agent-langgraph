@@ -6,7 +6,8 @@ from pathlib import Path
 from typing import Generator, Optional
 
 import pandas as pd
-from config import DEFAULT_CONFIG, DatabaseConfig
+
+from database.config import DEFAULT_CONFIG, DatabaseConfig
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -127,7 +128,8 @@ class DatabaseManager:
                         quantity,
                     ),
                 )
-            logger.info(f"Successfully inserted product: {product_name}")
+                logger.info(f"Successfully inserted product: {product_name}")
+                conn.commit()
             return True
         except sqlite3.Error as e:
             logger.error(f"Error inserting product {product_name}: {e}")

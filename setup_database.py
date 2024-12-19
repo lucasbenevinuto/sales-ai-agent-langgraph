@@ -1,4 +1,4 @@
-from db_manager import DatabaseManager, logger
+from database.db_manager import DatabaseManager, logger
 
 
 def main():
