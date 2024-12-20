@@ -14,3 +14,4 @@ downloads/
 *.env
 .vscode
 *.db
+*.json
