@@ -11,6 +11,22 @@ db_manager = DatabaseManager()
 
 
 @tool
+def get_available_categories() -> Dict[str, List[str]]:
+    """Returns a list of available product categories."""
+    with db_manager.get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT DISTINCT Category
+            FROM products
+            WHERE Quantity > 0
+        """
+        )
+        categories = cursor.fetchall()
+        return {"categories": [category["Category"] for category in categories]}
+
+
+@tool
 def search_products(
     query: Optional[str] = None,
     category: Optional[str] = None,
