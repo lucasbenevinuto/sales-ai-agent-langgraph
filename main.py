@@ -5,13 +5,11 @@ from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.messages.tool import ToolMessage
 
 from virtual_sales_agent.graph import graph
-from virtual_sales_agent.utils import _print_event
 
 
 def set_page_config():
     st.set_page_config(
         page_title="Virtual Sales Agent Chat",
-        layout="wide",
     )
 
 
@@ -45,35 +43,39 @@ def display_chat_history():
 
 def process_events(events):
     """Process events from the graph and extract messages."""
-    processed_contents = set()
+    seen_ids = set()
 
     for event in events:
         if isinstance(event, dict) and "messages" in event:
             messages = event["messages"]
-            if isinstance(messages, (list, tuple)):
-                for msg in messages:
-                    if isinstance(msg, (AIMessage, str)):
-                        content = msg.content if isinstance(msg, AIMessage) else msg
-                        if (
-                            content
-                            and content.strip()
-                            and content not in processed_contents
-                        ):
-                            processed_contents.add(content)
-                            st.session_state.messages.append(AIMessage(content=content))
-                            with st.chat_message("assistant"):
-                                st.write(content)
+            last_message = messages[-1] if messages else None
+
+            if isinstance(last_message, AIMessage):
+                if last_message.id not in seen_ids and last_message.content:
+                    seen_ids.add(last_message.id)
+                    st.session_state.messages.append(last_message)
+                    with st.chat_message("assistant"):
+                        st.write(last_message.content)
+
+                # Check for tool calls
+                if hasattr(last_message, "tool_calls") and last_message.tool_calls:
+                    return last_message.tool_calls[0]
+
+    return None
 
 
 def handle_tool_approval(snapshot, event):
     """Handle tool approval process."""
     st.write("⚠️ The assistant wants to perform an action. Do you approve?")
 
-    # Display the proposed action
     if isinstance(event, dict) and "messages" in event:
-        with st.chat_message("assistant"):
-            st.write("Proposed action:")
-            st.write(event["messages"][-1].content)
+        last_message = event["messages"][-1]
+        if hasattr(last_message, "tool_calls") and last_message.tool_calls:
+            tool_call = last_message.tool_calls[0]
+            with st.chat_message("assistant"):
+                st.write("Proposed action:")
+                st.write(f"Function: {tool_call['name']}")
+                st.write(f"Arguments: {tool_call['args']}")
 
     col1, col2 = st.columns(2)
 
@@ -117,7 +119,6 @@ def main():
     initialize_session_state()
     display_chat_history()
 
-    # Handle pending approval if exists
     if st.session_state.pending_approval:
         handle_tool_approval(*st.session_state.pending_approval)
 
@@ -130,21 +131,21 @@ def main():
         try:
             events = list(
                 graph.stream(
-                    {"messages": ("user", prompt)},
+                    {"messages": st.session_state.messages},
                     st.session_state.config,
                     stream_mode="values",
                 )
             )
-            print(events)
-            # Process initial response
-            process_events(events)
 
-            # Check for required approvals
-            snapshot = graph.get_state(st.session_state.config)
-            if snapshot.next:
-                for event in events:
-                    st.session_state.pending_approval = (snapshot, event)
-                    st.rerun()
+            print(events)
+            tool_call = process_events(events)
+
+            if tool_call:
+                snapshot = graph.get_state(st.session_state.config)
+                if snapshot.next:
+                    for event in events:
+                        st.session_state.pending_approval = (snapshot, event)
+                        st.rerun()
 
         except Exception as e:
             st.error(f"Error processing message: {str(e)}")
