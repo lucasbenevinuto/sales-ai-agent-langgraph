@@ -98,25 +98,23 @@ def display_chat_history():
             st.write(message.content)
 
 
-def process_events(events):
+def process_events(event):
     """Process events from the graph and extract messages."""
     seen_ids = set()
 
-    for event in events:
-        if isinstance(event, dict) and "messages" in event:
-            messages = event["messages"]
-            last_message = messages[-1] if messages else None
+    if isinstance(event, dict) and "messages" in event:
+        messages = event["messages"]
+        last_message = messages[-1] if messages else None
 
-            if isinstance(last_message, AIMessage):
-                if last_message.id not in seen_ids and last_message.content:
-                    seen_ids.add(last_message.id)
-                    st.session_state.messages.append(last_message)
-                    with st.chat_message("assistant"):
-                        st.write(last_message.content)
+        if isinstance(last_message, AIMessage):
+            if last_message.id not in seen_ids and last_message.content:
+                seen_ids.add(last_message.id)
+                st.session_state.messages.append(last_message)
+                with st.chat_message("assistant"):
+                    st.write(last_message.content)
 
-                # Check for tool calls
-                if hasattr(last_message, "tool_calls") and last_message.tool_calls:
-                    return last_message.tool_calls[0]
+            if hasattr(last_message, "tool_calls") and last_message.tool_calls:
+                return last_message.tool_calls[0]
 
     return None
 
@@ -152,7 +150,7 @@ def handle_tool_approval(snapshot, event):
             with st.spinner("Processing..."):
                 try:
                     result = graph.invoke(None, st.session_state.config)
-                    process_events([result])
+                    process_events(result)
                     st.session_state.pending_approval = None
                     st.rerun()
                 except Exception as e:
@@ -178,7 +176,7 @@ def handle_tool_approval(snapshot, event):
                             },
                             st.session_state.config,
                         )
-                        process_events([result])
+                        process_events(result)
                         st.session_state.pending_approval = None
                         st.session_state.show_reason_input = False
                         st.rerun()
@@ -209,7 +207,7 @@ def main():
         human_message = HumanMessage(content=prompt)
         st.session_state.messages.append(human_message)
         with st.chat_message("user"):
-            st.markdown(prompt)
+            st.write(prompt)
 
         try:
             with st.spinner("Thinking..."):
@@ -221,7 +219,8 @@ def main():
                     )
                 )
 
-                tool_call = process_events(events)
+                last_event = events[-1]
+                tool_call = process_events(last_event)
 
                 if tool_call:
                     snapshot = graph.get_state(st.session_state.config)
