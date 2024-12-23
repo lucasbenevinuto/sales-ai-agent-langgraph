@@ -1,3 +1,4 @@
+import json
 import uuid
 
 import streamlit as st
@@ -68,14 +69,25 @@ def handle_tool_approval(snapshot, event):
     """Handle tool approval process."""
     st.write("⚠️ The assistant wants to perform an action. Do you approve?")
 
-    if isinstance(event, dict) and "messages" in event:
-        last_message = event["messages"][-1]
-        if hasattr(last_message, "tool_calls") and last_message.tool_calls:
-            tool_call = last_message.tool_calls[0]
-            with st.chat_message("assistant"):
-                st.write("Proposed action:")
-                st.write(f"Function: {tool_call['name']}")
-                st.write(f"Arguments: {tool_call['args']}")
+    last_message = snapshot.values.get("messages", [])[-1]
+
+    if (
+        isinstance(last_message, AIMessage)
+        and hasattr(last_message, "tool_calls")
+        and last_message.tool_calls
+    ):
+        tool_call = last_message.tool_calls[0]
+        with st.chat_message("assistant"):
+            st.write("Proposed action details:")
+
+            with st.expander("View Function Details", expanded=True):
+                st.markdown(f"**Function Name:** `{tool_call['name']}`")
+
+                try:
+                    args_formatted = json.dumps(tool_call["args"], indent=2)
+                    st.code(f"Arguments:\n{args_formatted}", language="json")
+                except:
+                    st.code(f"Arguments:\n{tool_call['args']}")
 
     col1, col2 = st.columns(2)
 
@@ -98,9 +110,7 @@ def handle_tool_approval(snapshot, event):
                         {
                             "messages": [
                                 ToolMessage(
-                                    tool_call_id=event["messages"][-1].tool_calls[0][
-                                        "id"
-                                    ],
+                                    tool_call_id=last_message.tool_calls[0]["id"],
                                     content=f"API call denied by user. Reasoning: '{reason}'. Continue assisting, accounting for the user's input.",
                                 )
                             ]
