@@ -4,6 +4,7 @@ import uuid
 import streamlit as st
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.messages.tool import ToolMessage
+from langchain_core.runnables.graph import MermaidDrawMethod
 
 from virtual_sales_agent.graph import graph
 
@@ -14,6 +15,7 @@ def set_page_config():
         layout="wide",
         initial_sidebar_state="expanded",
     )
+
 
 def initialize_session_state():
     """Initialize session state variables."""
@@ -65,6 +67,12 @@ def setup_sidebar():
             for key in list(st.session_state.keys()):
                 del st.session_state[key]
             st.rerun()
+
+        if st.button("🔍 Visualize Workflow", use_container_width=True):
+            graph.get_graph().draw_mermaid_png(
+                draw_method=MermaidDrawMethod.API, output_file_path="graph.png"
+            )
+            st.image("graph.png")
 
         # Footer
         st.markdown("---")
