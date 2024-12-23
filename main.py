@@ -160,8 +160,11 @@ def handle_tool_approval(snapshot, event):
 
     with col2:
         if st.button("❌ Deny"):
+            st.session_state.show_reason_input = True
+
+        if st.session_state.get("show_reason_input", False):
             reason = st.text_input("Please explain why you're denying this action:")
-            if reason and st.button("Submit", use_container_width=True):
+            if reason and st.button("Submit Denial", key="submit_denial"):
                 with st.spinner("Processing..."):
                     try:
                         result = graph.invoke(
@@ -177,6 +180,7 @@ def handle_tool_approval(snapshot, event):
                         )
                         process_events([result])
                         st.session_state.pending_approval = None
+                        st.session_state.show_reason_input = False
                         st.rerun()
                     except Exception as e:
                         st.error(f"Error processing denial: {str(e)}")
