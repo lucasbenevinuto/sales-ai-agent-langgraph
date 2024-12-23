@@ -11,8 +11,9 @@ from virtual_sales_agent.graph import graph
 def set_page_config():
     st.set_page_config(
         page_title="Virtual Sales Agent Chat",
+        layout="wide",
+        initial_sidebar_state="expanded",
     )
-
 
 def initialize_session_state():
     """Initialize session state variables."""
@@ -34,8 +35,55 @@ def initialize_session_state():
         }
 
 
+def setup_sidebar():
+    """Configure the sidebar with agent information and controls."""
+    with st.sidebar:
+        # Agent Profile Section
+        st.title("🤖 Max")
+        st.markdown("### Your Virtual Sales Assistant")
+
+        # Agent Description
+        st.markdown(
+            """
+        Hi! I'm Max, your dedicated virtual sales assistant. I'm here to help you:
+        
+        - 🛒 Browse available products
+        - 📦 Place and track orders
+        - 💫 Get personalized recommendations
+        - ❓ Answer any questions
+        """
+        )
+
+        # Availability Status
+        st.markdown("---")
+        st.markdown("#### 🟢 Status: Online")
+        st.markdown("Available 24/7 to assist you!")
+
+        # New Chat Button
+        st.markdown("---")
+        if st.button("🔄 Start New Chat", use_container_width=True):
+            for key in list(st.session_state.keys()):
+                del st.session_state[key]
+            st.rerun()
+
+        # Footer
+        st.markdown("---")
+        st.markdown("*Powered by LangGraph & Streamlit*")
+
+
 def display_chat_history():
     """Display the chat history."""
+    if not st.session_state.messages:
+        st.markdown(
+            """
+            <div style='text-align: center; padding: 30px;'>
+                <h1>👋 Welcome!</h1>
+                <p>How can I assist you today?</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
     for message in st.session_state.messages:
         role = "user" if isinstance(message, HumanMessage) else "assistant"
         with st.chat_message(role):
@@ -78,10 +126,10 @@ def handle_tool_approval(snapshot, event):
     ):
         tool_call = last_message.tool_calls[0]
         with st.chat_message("assistant"):
-            st.write("Proposed action details:")
+            st.markdown("#### 🔧 Proposed Action")
 
             with st.expander("View Function Details", expanded=True):
-                st.markdown(f"**Function Name:** `{tool_call['name']}`")
+                st.info(f"Function: **{tool_call['name']}**")
 
                 try:
                     args_formatted = json.dumps(tool_call["args"], indent=2)
@@ -93,72 +141,87 @@ def handle_tool_approval(snapshot, event):
 
     with col1:
         if st.button("✅ Approve"):
-            try:
-                result = graph.invoke(None, st.session_state.config)
-                process_events([result])
-                st.session_state.pending_approval = None
-                st.rerun()
-            except Exception as e:
-                st.error(f"Error processing approval: {str(e)}")
-
-    with col2:
-        if st.button("❌ Deny"):
-            reason = st.text_input("Please explain why you're denying this action:")
-            if reason and st.button("Submit Denial"):
+            with st.spinner("Processing..."):
                 try:
-                    result = graph.invoke(
-                        {
-                            "messages": [
-                                ToolMessage(
-                                    tool_call_id=last_message.tool_calls[0]["id"],
-                                    content=f"API call denied by user. Reasoning: '{reason}'. Continue assisting, accounting for the user's input.",
-                                )
-                            ]
-                        },
-                        st.session_state.config,
-                    )
+                    result = graph.invoke(None, st.session_state.config)
                     process_events([result])
                     st.session_state.pending_approval = None
                     st.rerun()
                 except Exception as e:
-                    st.error(f"Error processing denial: {str(e)}")
+                    st.error(f"Error processing approval: {str(e)}")
+
+    with col2:
+        if st.button("❌ Deny"):
+            reason = st.text_input("Please explain why you're denying this action:")
+            if reason and st.button("Submit", use_container_width=True):
+                with st.spinner("Processing..."):
+                    try:
+                        result = graph.invoke(
+                            {
+                                "messages": [
+                                    ToolMessage(
+                                        tool_call_id=last_message.tool_calls[0]["id"],
+                                        content=f"API call denied by user. Reasoning: '{reason}'. Continue assisting, accounting for the user's input.",
+                                    )
+                                ]
+                            },
+                            st.session_state.config,
+                        )
+                        process_events([result])
+                        st.session_state.pending_approval = None
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"Error processing denial: {str(e)}")
 
 
 def main():
     set_page_config()
     initialize_session_state()
-    display_chat_history()
+    setup_sidebar()
 
-    if st.session_state.pending_approval:
-        handle_tool_approval(*st.session_state.pending_approval)
+    chat_container = st.container()
+    with chat_container:
+        st.markdown(
+            """
+            <h1 style='text-align: center; margin-bottom: 30px;'>
+                🏪 Virtual Store Assistant
+            </h1>
+            """,
+            unsafe_allow_html=True,
+        )
 
-    if prompt := st.chat_input("What would you like to order?"):
-        human_message = HumanMessage(content=prompt)
-        st.session_state.messages.append(human_message)
-        with st.chat_message("user"):
-            st.markdown(prompt)
+        display_chat_history()
 
-        try:
-            events = list(
-                graph.stream(
-                    {"messages": st.session_state.messages},
-                    st.session_state.config,
-                    stream_mode="values",
-                )
-            )
+        if st.session_state.pending_approval:
+            handle_tool_approval(*st.session_state.pending_approval)
 
-            print(events)
-            tool_call = process_events(events)
+        if prompt := st.chat_input("What would you like to order?"):
+            human_message = HumanMessage(content=prompt)
+            st.session_state.messages.append(human_message)
+            with st.chat_message("user"):
+                st.markdown(prompt)
 
-            if tool_call:
-                snapshot = graph.get_state(st.session_state.config)
-                if snapshot.next:
-                    for event in events:
-                        st.session_state.pending_approval = (snapshot, event)
-                        st.rerun()
+            try:
+                with st.spinner("Thinking..."):
+                    events = list(
+                        graph.stream(
+                            {"messages": st.session_state.messages},
+                            st.session_state.config,
+                            stream_mode="values",
+                        )
+                    )
 
-        except Exception as e:
-            st.error(f"Error processing message: {str(e)}")
+                    tool_call = process_events(events)
+
+                    if tool_call:
+                        snapshot = graph.get_state(st.session_state.config)
+                        if snapshot.next:
+                            for event in events:
+                                st.session_state.pending_approval = (snapshot, event)
+                                st.rerun()
+
+            except Exception as e:
+                st.error(f"Error processing message: {str(e)}")
 
 
 if __name__ == "__main__":
