@@ -179,49 +179,47 @@ def main():
     initialize_session_state()
     setup_sidebar()
 
-    chat_container = st.container()
-    with chat_container:
-        st.markdown(
-            """
-            <h1 style='text-align: center; margin-bottom: 30px;'>
-                🏪 Virtual Store Assistant
-            </h1>
-            """,
-            unsafe_allow_html=True,
-        )
+    st.markdown(
+        """
+        <h1 style='text-align: center; margin-bottom: 30px;'>
+            🏪 Virtual Store Assistant
+        </h1>
+        """,
+        unsafe_allow_html=True,
+    )
 
-        display_chat_history()
+    display_chat_history()
 
-        if st.session_state.pending_approval:
-            handle_tool_approval(*st.session_state.pending_approval)
+    if st.session_state.pending_approval:
+        handle_tool_approval(*st.session_state.pending_approval)
 
-        if prompt := st.chat_input("What would you like to order?"):
-            human_message = HumanMessage(content=prompt)
-            st.session_state.messages.append(human_message)
-            with st.chat_message("user"):
-                st.markdown(prompt)
+    if prompt := st.chat_input("What would you like to order?"):
+        human_message = HumanMessage(content=prompt)
+        st.session_state.messages.append(human_message)
+        with st.chat_message("user"):
+            st.markdown(prompt)
 
-            try:
-                with st.spinner("Thinking..."):
-                    events = list(
-                        graph.stream(
-                            {"messages": st.session_state.messages},
-                            st.session_state.config,
-                            stream_mode="values",
-                        )
+        try:
+            with st.spinner("Thinking..."):
+                events = list(
+                    graph.stream(
+                        {"messages": st.session_state.messages},
+                        st.session_state.config,
+                        stream_mode="values",
                     )
+                )
 
-                    tool_call = process_events(events)
+                tool_call = process_events(events)
 
-                    if tool_call:
-                        snapshot = graph.get_state(st.session_state.config)
-                        if snapshot.next:
-                            for event in events:
-                                st.session_state.pending_approval = (snapshot, event)
-                                st.rerun()
+                if tool_call:
+                    snapshot = graph.get_state(st.session_state.config)
+                    if snapshot.next:
+                        for event in events:
+                            st.session_state.pending_approval = (snapshot, event)
+                            st.rerun()
 
-            except Exception as e:
-                st.error(f"Error processing message: {str(e)}")
+        except Exception as e:
+            st.error(f"Error processing message: {str(e)}")
 
 
 if __name__ == "__main__":
