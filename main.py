@@ -17,6 +17,17 @@ def set_page_config():
     )
 
 
+def set_page_style():
+    st.markdown(
+        f"""
+        <style>
+        {open("style.css").read()}
+        </style>
+    """,
+        unsafe_allow_html=True,
+    )
+
+
 def initialize_session_state():
     """Initialize session state variables."""
     if "messages" not in st.session_state:
@@ -40,28 +51,40 @@ def initialize_session_state():
 def setup_sidebar():
     """Configure the sidebar with agent information and controls."""
     with st.sidebar:
-        # Agent Profile Section
-        st.title("🤖 Max")
-        st.markdown("### Your Virtual Sales Assistant")
-
-        # Agent Description
         st.markdown(
             """
-        Hi! I'm Max, your dedicated virtual sales assistant. I'm here to help you:
-        
-        - 🛒 Browse available products
-        - 📦 Place and track orders
-        - 💫 Get personalized recommendations
-        - ❓ Answer any questions
-        """
+            <div class="agent-profile">
+                <div class="profile-header">
+                    <div class="avatar">🤖</div>
+                    <h1>Virtual Sales Agent</h1>
+                </div>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <span class="icon">🛒</span>
+                        <span>Browse available products</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="icon">📦</span>
+                        <span>Place orders</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="icon">🚚</span>
+                        <span>Track your orders</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="icon">🎯</span>
+                        <span>Get personalized recommendations</span>
+                    </div>
+                </div>
+                <div class="status-card">
+                    <div class="status-indicator"></div>
+                    <span>Ready to Assist</span>
+                </div>
+            </div>
+        """,
+            unsafe_allow_html=True,
         )
 
-        # Availability Status
-        st.markdown("---")
-        st.markdown("#### 🟢 Status: Online")
-        st.markdown("Available 24/7 to assist you!")
-
-        # New Chat Button
         st.markdown("---")
         if st.button("🔄 Start New Chat", use_container_width=True):
             for key in list(st.session_state.keys()):
@@ -74,9 +97,16 @@ def setup_sidebar():
             )
             st.image("graph.png")
 
-        # Footer
-        st.markdown("---")
-        st.markdown("*Powered by LangGraph & Streamlit*")
+        st.markdown(
+            """
+            <div class="sidebar-footer">
+                <div class="powered-by">
+                    Enhanced by AI • Crafted for You
+                </div>
+            </div>
+        """,
+            unsafe_allow_html=True,
+        )
 
 
 def display_chat_history():
@@ -162,7 +192,8 @@ def handle_tool_approval(snapshot, event):
 
         if st.session_state.get("show_reason_input", False):
             reason = st.text_input("Please explain why you're denying this action:")
-            if reason and st.button("Submit Denial", key="submit_denial"):
+            submit = st.button("Submit Denial", key="submit_denial")
+            if reason and submit:
                 with st.spinner("Processing..."):
                     try:
                         result = graph.invoke(
@@ -186,17 +217,10 @@ def handle_tool_approval(snapshot, event):
 
 def main():
     set_page_config()
+    set_page_style()
     initialize_session_state()
     setup_sidebar()
 
-    st.markdown(
-        """
-        <h1 style='text-align: center; margin-bottom: 30px;'>
-            🏪 Virtual Store Assistant
-        </h1>
-        """,
-        unsafe_allow_html=True,
-    )
 
     display_chat_history()
 
