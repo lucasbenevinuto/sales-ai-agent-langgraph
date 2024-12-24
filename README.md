@@ -1,144 +1,114 @@
-# Virtual Sales Agent with LangGraph & Streamlit & Gemini Flash
+# Virtual Sales Agent powered by LangGraph, Streamlit & Gemini Flash
 
-![Fluxo de Interação do Vendedor Virtual](./assets/graph.png "Fluxo de Interação do Vendedor Virtual")
+This project implements a Virtual Sales Agent that simulates customer interactions, providing information and support through a Streamlit interface. Using the power of **LangChain**, **LangGraph**, and a SQLite database, this agent can answer product questions, create orders, check order statuses, and offer personalized recommendations.
 
-## Objetivo
+![Virtual Sales Agent Interaction Flow](./assets/graph.png "Virtual Sales Agent Interaction Flow")
 
-Desenvolver um vendedor virtual que interaja com clientes via Streamlit, utilizando **LangChain**, **LangGraph** e um banco de dados SQLite fornecido. O bot deve responder a perguntas sobre produtos, estoque, pedidos e oferecer sugestões personalizadas com base no histórico do cliente.
+## ✨ Key Features
 
----
+This virtual sales agent can assist customers with:
 
-## Funcionalidades do Projeto
+1.  **Product Inquiries:**
+    *   Answer questions about product availability, pricing, and stock levels.
+    *   **Example Questions:**
+        *   "What products do you have in stock?"
+        *   "How much does product X cost?"
+        *   "Is product Y available?"
+2.  **Order Placement:**
+    *   Allow customers to create new orders, referencing data from the database.
+    *   **Example Request:** "I would like to order 2 units of product Z."
+3.  **Order Tracking:**
+    *   Provide up-to-date status information for existing orders.
+    *   **Example Question:** "What is the status of order #54321?"
+4.  **Personalized Recommendations:**
+    *   Suggest relevant products based on a customer's past purchase history.
+    *   **Example Recommendation:** "Based on your previous order, you might also like product A."
 
-### 1. **Consulta de Produtos**
-- O cliente pode perguntar sobre produtos disponíveis, preços e estoque.
-- **Exemplos:**
-  - “Quais são os produtos disponíveis?”
-  - “Qual o preço do produto X?”
+## 🛠️ Built With
 
-### 2. **Criação de Pedidos**
-- Permitir que os clientes criem pedidos a partir dos dados disponíveis no banco de dados.
-- **Exemplo:** “Quero comprar 5 unidades do produto Y”.
+*   **LangChain:** Provides the framework for developing AI-powered conversational applications.
+*   **LangGraph:** Enables the creation of sophisticated, stateful agent workflows.
+*   **SQLite:** A lightweight database for managing product data and orders.
+*   **Streamlit:** Facilitates the development of interactive web applications for the agent interface.
+*   **Gemini Flash 2.0:** A fast and efficient large language model from Google for natural language understanding.
 
-### 3. **Consulta de Pedidos**
-- Permitir que os clientes consultem o status de pedidos anteriores.
-- **Exemplo:** “Qual é o status do meu pedido #12345?”
+## 📂 Project Structure
 
-### 4. **Sugestões Personalizadas**
-- Oferecer recomendações de produtos com base no histórico de pedidos do cliente.
-- **Exemplo:** “Baseado na sua última compra, recomendamos o produto Z”.
+Here's a breakdown of the project's directory structure:
 
-### 5. **Escalonamento para Atendente Humano**
-- Permitir que os clientes solicitem atendimento humano.
-- **Exemplo:** “Eu gostaria de conversar com um atendente humano”.
-
----
-
-## Requisitos Técnicos
-
-### **Banco de Dados**
-O projeto utiliza o banco de dados SQLite Chinook, que pode ser acessado em: [SQLite Sample Database](https://www.sqlitetutorial.net/sqlite-sample-database/).
-
-O bot deve consultar e manipular as seguintes tabelas:
-- **Customers**: Buscar informações sobre clientes.
-- **Products**: Listar produtos disponíveis.
-- **Orders** e **OrderDetails**: Gerenciar pedidos.
-- **Employees**: Simular atendimento personalizado.
-
-### **Tecnologias Utilizadas**
-- **LangChain**: Orquestração da lógica de interação do bot.
-- **LangGraph**: Criação e manipulação do fluxo de diálogo.
-- **SQLite**: Banco de dados relacional.
-- **Streamlit**: Interface de demonstração (simulada, se necessário).
-
----
-
-## Estrutura do Projeto
-
-```plaintext
+```
 .
+├── assets/
+│   ├── graph.png             # Agent workflow diagram
+│   └── style.css             # Streamlit custom styling
 ├── database/
 │   ├── db/
-│   │   ├── chinook.db            # Banco de dados Chinook
-│   │   ├── products.json         # Dados de produtos que serão usados no bot
-│   │   └── schemas.sql           # Definições de esquemas em SQL
-│   ├── utils/
-│   │   ├── __init__.py           # Inicialização do módulo utils
-│   │   └── database_functions.py # Funções relacionadas ao banco de dados
-│   └── setup_database.py         # Script para configurar o banco de dados
-├── streamlit/
-│   └── app.py                    # Interface de demonstração com Streamlit
+│   │   ├── products.json         # Bot product data (initial)
+│   │   └── schemas.sql           # SQL schema definitions
+│   ├── db_manager.py             # Handles database interactions
+│   └── config.py                 # Database connection configuration
 ├── virtual_sales_agent/
-│   ├── nodes/
-│   │   ├── __init__.py                   # Inicialização do módulo nodes
-│   │   ├── assistant.py                  # Lógica principal do assistente
-│   │   ├── check_order_status_node.py    # Verificar o status de pedidos
-│   │   ├── create_order_node.py          # Criar novos pedidos
-│   │   ├── escalate_to_employee_node.py  # Lógica para escalonamento
-│   │   ├── query_products_node.py        # Consulta de produtos
-│   │   ├── recommend_product_node.py     # Lógica de recomendação de produtos
-│   │   ├── routing_functions.py          # Lógica de roteamento
-│   │   └── state.py                      # Gerenciamento de estado persistente
-│   ├── graph.py                  # Manipulação de diálogos com LangGraph
-│   ├── prompts.py                # Modelos de prompts para LangChain
-│   ├── tools.py                  # Ferramentas do agente
-│   └── utils_functions.py        # Funções utilitárias do agente
-├── env-example                   # Exemplo de arquivo .env
-├── requirements.txt              # Dependências do projeto
-├── README.md                     # Documentação do projeto
-└── graph.png                     # Diagrama do fluxo de interação
+│   ├── graph.py                  # LangGraph agent state machine and logic
+│   ├── tools.py                  # Custom tools used by the agent
+│   └── utils_functions.py        # Utility functions for the agent
+├── env-example                 # Environment variables template
+├── main.py                       # Main Streamlit app
+├── requirements.txt              # Project dependencies
+├── README.md                     # This file!
+└── setup_database.py             # Script to initialize the database
 ```
 
----
+## 🚀 Get Started
 
-## Configuração do Ambiente
+Follow these steps to set up and run the Virtual Sales Agent:
 
-### **1. Pré-requisitos**
-- Python 3.12 ou superior.
-- Ambiente virtual configurado com `venv`.
+### 1. Prerequisites
 
-### **2. Instalação**
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/lucasboscatti/virtual-sales-agent-langgraph.git
-   cd vendedor-virtual
-   ```
+*   Ensure you have **Python 3.12 or later** installed on your machine.
+*   We recommend using a virtual environment for managing dependencies.
 
-2. Crie e ative o ambiente virtual:
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate  # Para Linux/Mac
-   venv\Scripts\activate  # Para Windows
-   ```
+### 2. Installation Steps
 
-3. Instale as dependências:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. Configure o as variáveis de ambiente
-   - Substitua o arquivo `.env-example` por `.env` e preencha as variáveis necessárias.
-   - Neste projeto foi utilizado os modelos Llama3 hospeados pela plataforma [groq](https://groq.com/).
-        - Crie uma conta no site e obtenha a chave `GROQ_API_KEY`.
-   - Para monitoramento do fluxo de interação do agente, foi utilizado a plataforma [Smith](https://smith.langchain.com/).
-        - Crie uma conta no site e obtenha a chave `LANGCHAIN_API_KEY`.
-   - Exporte as variáveis de ambiente:
-        ```bash
-        export GROQ_API_KEY=...
-        export LANGCHAIN_API_KEY=...
-        export LANGCHAIN_TRACING_V2=true
-        export LANGCHAIN_ENDPOINT=https://api.smith.langchain.com
-        export LANGCHAIN_PROJECT=virtual-sales-agent
-        ```
-
-5. [OPCIONAL] O banco já está baixado e configurado, caso contrário, execute o script:
+1.  **Clone the Repository:**
     ```bash
-    python3 database/setup_database.py
+    git clone https://github.com/lucasboscatti/virtual-sales-agent-langgraph.git
+    cd virtual-sales-agent
     ```
 
-5. Execute a aplicação de demonstração:
-   ```bash
-   streamlit run streamlit/app.py
-   ```
+2.  **Create a Virtual Environment:**
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate   # Linux/Mac
+    venv\Scripts\activate       # Windows
+    ```
 
----
+3.  **Install Dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4.  **Environment Configuration:**
+    *   **Rename the `.env-example` file to `.env`.**
+    *   **Set up your API keys:**
+        *   **Google Gemini Flash:** Requires a `GOOGLE_API_KEY`, along with your `GOOGLE_APPLICATION_CREDENTIALS` (path to your credentials file), `GCP_PROJECT_ID` and `REGION`. Obtain these from your Google Cloud Platform (GCP) account at [Google AI Studio](https://aistudio.google.com/).
+        *   **LangSmith:** Create a [LangSmith](https://smith.langchain.com/) account and get your `LANGCHAIN_API_KEY`. This is for monitoring and debugging agent interactions.
+    *   **Load environment variables:**
+        ```bash
+        source .env
+        ```
+
+5.  **Initialize the Database:**
+    ```bash
+    python3 setup_database.py
+    ```
+
+6.  **Launch the Streamlit App:**
+    ```bash
+    streamlit run main.py
+    ```
+
+    This will open the application in your web browser, and you can start interacting with the Virtual Sales Agent.
+
+##  🤝 Contributing
+
+Contributions are welcome! If you have ideas for improvements or bug fixes, feel free to submit a pull request.
