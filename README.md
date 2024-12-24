@@ -1,6 +1,6 @@
 # Vendedor Virtual com LangChain e LangGraph via Streamlit
 
-![Fluxo de Interação do Vendedor Virtual](./graph.png "Fluxo de Interação do Vendedor Virtual")
+![Fluxo de Interação do Vendedor Virtual](./assets/graph.png "Fluxo de Interação do Vendedor Virtual")
 
 ## Objetivo
 

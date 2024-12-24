@@ -21,7 +21,7 @@ def set_page_style():
     st.markdown(
         f"""
         <style>
-        {open("style.css").read()}
+        {open("assets/style.css").read()}
         </style>
     """,
         unsafe_allow_html=True,
@@ -92,10 +92,7 @@ def setup_sidebar():
             st.rerun()
 
         if st.button("🔍 Visualize Workflow", use_container_width=True):
-            graph.get_graph().draw_mermaid_png(
-                draw_method=MermaidDrawMethod.API, output_file_path="graph.png"
-            )
-            st.image("graph.png")
+            st.image("assets/graph.png")
 
         st.markdown(
             """
@@ -220,7 +217,6 @@ def main():
     set_page_style()
     initialize_session_state()
     setup_sidebar()
-
 
     display_chat_history()
 
