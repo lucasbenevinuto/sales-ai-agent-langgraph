@@ -1,4 +1,4 @@
-# Vendedor Virtual com LangChain e LangGraph via Streamlit
+# Virtual Sales Agent with LangGraph & Streamlit & Gemini Flash
 
 ![Fluxo de Interação do Vendedor Virtual](./assets/graph.png "Fluxo de Interação do Vendedor Virtual")
 

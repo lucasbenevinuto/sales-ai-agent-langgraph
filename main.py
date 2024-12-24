@@ -4,7 +4,6 @@ import uuid
 import streamlit as st
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.messages.tool import ToolMessage
-from langchain_core.runnables.graph import MermaidDrawMethod
 
 from virtual_sales_agent.graph import graph
 
