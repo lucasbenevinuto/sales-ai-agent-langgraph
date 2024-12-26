@@ -2,7 +2,7 @@
 
 This project implements a **Virtual Sales Agent** that simulates customer interactions, providing information and support through a Streamlit interface. Using the power of **LangChain**, **LangGraph**, and a SQLite database, this agent can answer product questions, create orders, check order statuses, and offer personalized recommendations. These tools are divided into safe and sensitive categories. For sensitive tools, such as creating orders, a human-in-the-loop mechanism is implemented, requiring approval or denial before proceeding.
 
-👉 Check out a quick demo of the Virtual Sales Agent in action in the [Interface Preview](#-interface-preview) section!
+👉 Check out a quick demo of the Virtual Sales Agent in action in the [Interface Preview](#interface-preview) section!
 
 ![Agent Workflow Diagram](./assets/agent_workflow.png)
 
