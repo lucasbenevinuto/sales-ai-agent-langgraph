@@ -9,17 +9,16 @@ This project implements a **Virtual Sales Agent** that simulates customer intera
 ---
 
 ## 📖 Table of Contents
-1. [Key Features](#-key-features)
-2. [Use Cases](#-use-cases)
-3. [Built With](#-built-with)
-4. [Project Structure](#-project-structure)
-5. [Interface Preview](#-interface-preview)
-6. [Get Started](#-get-started)
-7. [Troubleshooting](#-troubleshooting)
-8. [Contributing](#-contributing)
-9. [Related Resources](#-related-resources)
-10. [Future Plans](#-future-plans)
-11. [License](#-license)
+1. [Key Features](#key-features)
+2. [Built With](#built-with)
+3. [Use Cases](#use-cases)
+4. [Project Structure](#project-structure)
+5. [Interface Preview](#interface-preview)
+6. [Get Started](#get-started)
+7. [Contributing](#contributing)
+8. [Related Resources](#related-resources)
+9. [Future Plans](#future-plans)
+10. [License](#license)
 
 ---
 
