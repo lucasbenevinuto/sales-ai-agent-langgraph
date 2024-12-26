@@ -1,8 +1,10 @@
 # Virtual Sales Agent powered by LangGraph, Streamlit & Gemini Flash
 
-This project implements a **Virtual Sales Agent** that simulates customer interactions, providing information and support through a Streamlit interface. Using the power of **LangChain**, **LangGraph**, and a SQLite database, this agent can answer product questions, create orders, check order statuses, and offer personalized recommendations.
+This project implements a **Virtual Sales Agent** that simulates customer interactions, providing information and support through a Streamlit interface. Using the power of **LangChain**, **LangGraph**, and a SQLite database, this agent can answer product questions, create orders, check order statuses, and offer personalized recommendations. These tools are divided into safe and sensitive categories. For sensitive tools, such as creating orders, a human-in-the-loop mechanism is implemented, requiring approval or denial before proceeding.
 
-![Virtual Sales Agent Interaction Flow](./assets/graph.png "Virtual Sales Agent Interaction Flow")
+👉 Check out a quick demo of the Virtual Sales Agent in action in the [Interface Preview](#-interface-preview) section!
+
+![Agent Workflow Diagram](./assets/agent_workflow.png)
 
 ---
 
@@ -97,14 +99,17 @@ Here's a breakdown of the project's directory structure:
 
 ## 🖼️ Interface Preview
 
-1. **Main Interface**  
-   A clean and user-friendly chatbot
-   ![Streamlit Interface](./assets/streamlit.png)
+1. **🎥 Demo GIF**
+   Here's a quick demonstration of the Virtual Sales Agent in action:
+   - **Main Interface:** A clean and intuitive chatbot interface that interacts with customers to answer queries and perform tasks.
+   - **Human-in-the-Loop Approval System:** A mechanism where sensitive actions, like order creation, require user approval. Users can review the action details and provide feedback for continuous improvement.
 
-2. **Human-in-the-Loop Approval System**  
-   The agent proposes actions, such as creating orders, which require user approval to proceed. Users can review the proposed action, including details like product quantities and IDs, and decide to either approve or deny the action. If denied, users can provide feedback explaining why the action is incorrect—ensuring the agent learns and improves its performance over time.  
-   ![Human-in-the-Loop Approval](./assets/human_in_the_loop.png)
+   ![Demo GIF](./assets/demo.gif)
 
+2. **LangGraph Workflow**
+
+    ![Virtual Sales Agent Interaction Flow](./assets/graph.png "Virtual Sales Agent Interaction Flow")
+    
 ---
 
 ## 🚀 Get Started
