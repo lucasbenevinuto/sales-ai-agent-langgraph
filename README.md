@@ -22,7 +22,7 @@ This project implements a **Virtual Sales Agent** that simulates customer intera
 
 ---
 
-## ✨ Key Features {#key-features}
+## ✨ Key Features
 
 This virtual sales agent can assist customers with:
 
@@ -47,7 +47,7 @@ This virtual sales agent can assist customers with:
 
 ---
 
-## 🎯 Use Cases {#use-cases}
+## 🎯 Use Cases
 
 This Virtual Sales Agent is ideal for:
 - **E-commerce websites** to streamline customer service and increase sales.
@@ -56,7 +56,7 @@ This Virtual Sales Agent is ideal for:
 
 ---
 
-## 🛠️ Built With {#built-with}
+## 🛠️ Built With
 
 - **LangChain:** Provides the framework for developing AI-powered conversational applications.
 - **LangGraph:** Enables the creation of sophisticated, stateful agent workflows.
@@ -66,7 +66,7 @@ This Virtual Sales Agent is ideal for:
 
 ---
 
-## 📂 Project Structure {#project-structure}
+## 📂 Project Structure
 
 Here's a breakdown of the project's directory structure:
 
@@ -96,7 +96,7 @@ Here's a breakdown of the project's directory structure:
 
 ---
 
-## 🖼️ Interface Preview {#interface-preview}
+## 🖼️ Interface Preview
 
 1. **🎥 Demo GIF**
    Here's a quick demonstration of the Virtual Sales Agent in action:
@@ -111,7 +111,7 @@ Here's a breakdown of the project's directory structure:
     
 ---
 
-## 🚀 Get Started {#get-started}
+## 🚀 Get Started
 
 Follow these steps to set up and run the Virtual Sales Agent:
 
@@ -164,7 +164,7 @@ Follow these steps to set up and run the Virtual Sales Agent:
 
 ---
 
-## 🤝 Contributing {#contributing}
+## 🤝 Contributing
 
 We welcome contributions to improve this project! Here’s how you can help:
 1. Fork the repository and create a feature branch.
@@ -174,7 +174,7 @@ We welcome contributions to improve this project! Here’s how you can help:
 
 ---
 
-## 📚 Related Resources {#related-resources}
+## 📚 Related Resources
 
 - [LangChain Documentation](https://python.langchain.com/docs/introduction/)
 - [LangGraph Documentation](https://langchain-ai.github.io/langgraph/tutorials/introduction/)
@@ -183,13 +183,13 @@ We welcome contributions to improve this project! Here’s how you can help:
 
 ---
 
-## 🚀 Future Plans {#future-plans}
+## 🚀 Future Plans
 
 - Fuzzy logic for product names matching
 
 ---
 
-## 📝 License {#license}
+## 📝 License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
