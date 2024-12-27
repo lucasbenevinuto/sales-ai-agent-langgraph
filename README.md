@@ -73,9 +73,9 @@ Here's a breakdown of the project's directory structure:
 ```
 .
 ├── assets/
+│   ├── agent_workflow.png    # Diagram
+│   ├── demo.gif              # Demo gif
 │   ├── graph.png             # Agent workflow diagram
-│   ├── human_in_the_loop.png # Human-in-the-loop interface screenshot
-│   ├── streamlit.png         # Main interface screenshot
 │   └── style.css             # Streamlit custom styling
 ├── database/
 │   ├── db/

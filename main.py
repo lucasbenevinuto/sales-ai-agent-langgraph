@@ -41,7 +41,7 @@ def initialize_session_state():
     if "config" not in st.session_state:
         st.session_state.config = {
             "configurable": {
-                "customer_id": "3442 587242",
+                "customer_id": "123456789",
                 "thread_id": st.session_state.thread_id,
             }
         }
