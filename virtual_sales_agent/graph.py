@@ -3,10 +3,9 @@ from datetime import datetime
 from typing import Annotated
 
 from dotenv import load_dotenv
-from google.cloud import aiplatform
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import Runnable, RunnableConfig
-from langchain_google_vertexai import ChatVertexAI
+from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, StateGraph
 from langgraph.graph.message import AnyMessage, add_messages
@@ -19,6 +18,69 @@ from virtual_sales_agent.tools import (
     get_available_categories,
     search_products,
     search_products_recommendations,
+    get_api_welcome,
+    check_api_health,
+    get_db_tables,
+    get_current_user,
+    list_users,
+    list_expenses,
+    list_expense_categories,
+    list_investments,
+    list_goals,
+    list_incomes,
+    get_expenses_by_category,
+    get_expenses_by_month,
+    get_cashflow,
+    get_financial_summary,
+    get_financial_trends,
+    list_projects,
+    list_boards,
+    list_columns,
+    list_tasks,
+    register_user,
+    login_user,
+    logout_user,
+    update_user,
+    delete_user,
+    create_expense,
+    get_expense,
+    update_expense,
+    delete_expense,
+    create_expense_category,
+    get_expense_category,
+    update_expense_category,
+    delete_expense_category,
+    create_investment,
+    get_investment,
+    update_investment,
+    delete_investment,
+    create_goal,
+    get_goal,
+    update_goal,
+    delete_goal,
+    create_income,
+    get_income,
+    update_income,
+    delete_income,
+    create_project,
+    get_project,
+    update_project,
+    delete_project,
+    create_board,
+    get_board,
+    update_board,
+    delete_board,
+    create_column,
+    get_column,
+    update_column,
+    delete_column,
+    create_task,
+    get_task,
+    update_task,
+    delete_task,
+    send_chat_message,
+    get_session_state,
+    reset_session,
 )
 from virtual_sales_agent.utils import create_tool_node_with_fallback
 
@@ -28,16 +90,7 @@ os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGCHAIN_API_KEY")
 os.environ["LANGCHAIN_TRACING_V2"] = os.getenv("LANGCHAIN_TRACING_V2")
 os.environ["LANGCHAIN_ENDPOINT"] = os.getenv("LANGCHAIN_ENDPOINT")
 os.environ["LANGCHAIN_PROJECT"] = os.getenv("LANGCHAIN_PROJECT")
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.getenv(
-    "GOOGLE_APPLICATION_CREDENTIALS"
-)
-os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
-
-PROJECT_ID = os.getenv("PROJECT_ID")
-REGION = os.getenv("REGION")
-
-# Initialize Vertex AI
-aiplatform.init(project=PROJECT_ID, location=REGION)
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
 
 class State(TypedDict):
@@ -69,49 +122,53 @@ class Assistant:
         return {"messages": result}
 
 
-llm = ChatVertexAI(model="gemini-2.0-flash-exp")
+# Replace Google's LLM with OpenAI
+llm = ChatOpenAI(model="gpt-4o-mini")
 
 assistant_prompt = ChatPromptTemplate.from_messages(
     [
         (
             "system",
-            """You are a helpful virtual sales assistant for our online store. Your goal is to provide excellent customer service by helping customers find products, make purchases, and track their orders.
+            """You are a versatile virtual assistant for FrontGestor, a comprehensive platform that integrates e-commerce, financial management, project management, and user administration. Your goal is to provide excellent assistance across all these domains.
 
-Use the provided tools to:
-- Search for products and provide relevant recommendations
-- See available product categories
-- Process customer orders efficiently
-- Track order status and provide updates
-- Guide customers through their shopping experience
+USE CASES AND TOOLS:
 
-When searching for products:
-- Be thorough in understanding customer needs and preferences
-- If specific products aren't found, suggest similar alternatives
-- Use the get product categories tool to help customers explore options
-- Use category and price range flexibility to find relevant options if the customer provides this information
-- Provide detailed product information including price, availability in bullet points style.
+2. FINANCIAL MANAGEMENT:
+   - Track expenses (list_expenses, create_expense, update_expense, delete_expense)
+   - Manage expense categories (list_expense_categories, create_expense_category, etc.)
+   - Monitor investments (list_investments, create_investment, update_investment, etc.)
+   - Set and track financial goals (list_goals, create_goal, update_goal, etc.)
+   - Record incomes (list_incomes, create_income, update_income, etc.)
+   - Analyze financial data (get_expenses_by_category, get_expenses_by_month)
+   - Generate financial reports (get_cashflow, get_financial_summary, get_financial_trends)
 
-When making recommendations:
-- Consider customer's past purchases and preferences
-- Suggest complementary products when appropriate
-- Focus on in-stock items
-- Explain why you're recommending specific products
+3. PROJECT MANAGEMENT:
+   - Organize projects (list_projects, create_project, update_project, etc.)
+   - Manage kanban boards (list_boards, create_board, update_board, etc.)
+   - Configure columns (list_columns, create_column, update_column, etc.)
+   - Track tasks (list_tasks, create_task, update_task, etc.)
 
-When handling orders:
-- Verify product availability before confirming orders
-- Clearly communicate order details and total costs
-- Provide order tracking information
-- Keep customers informed about their order status
+4. USER MANAGEMENT:
+   - Handle user accounts (register_user, login_user, logout_user, update_user, delete_user)
+   - View user information (get_current_user, list_users)
 
-Always maintain a friendly, professional tone and:
+GUIDELINES:
+
+- Be proactive in understanding user needs across all platform domains
+- Verify user identity and permissions before performing sensitive operations
+- Provide clear explanations for financial metrics and recommendations
+- Help organize projects and tasks efficiently
+- Present information in a structured, easy-to-understand format
 - Ask clarifying questions when needed
-- Provide proactive suggestions
-- Be transparent about product availability and delivery times
-- Help customers find alternatives if their first choice is unavailable
-- Follow up on order status proactively
-- Explain any limitations or restrictions clearly
+- Provide step-by-step guidance for complex operations
+- Maintain data privacy and security at all times
 
-If you can't find exactly what the customer is looking for, explore alternatives and provide helpful suggestions before concluding that an item is unavailable.
+SYSTEM FUNCTIONS:
+- Use check_api_health to verify system status
+- Use get_session_state to understand user context
+- Use reset_session when needed for a fresh start
+
+Always maintain a professional, helpful tone and provide comprehensive assistance across all platform functions.
 
 \n\nCurrent user:\n<User>\n{user_info}\n</User>
 \nCurrent time: {time}.""",
@@ -126,11 +183,74 @@ safe_tools = [
     search_products,
     search_products_recommendations,
     check_order_status,
+    get_api_welcome,
+    check_api_health,
+    get_db_tables,
+    get_current_user,
+    list_users,
+    list_expenses,
+    list_expense_categories,
+    list_investments,
+    list_goals,
+    list_incomes,
+    get_expenses_by_category,
+    get_expenses_by_month,
+    get_cashflow,
+    get_financial_summary,
+    get_financial_trends,
+    list_projects,
+    list_boards,
+    list_columns,
+    list_tasks,
 ]
 
 # Sensitive tools (confirmation needed)
 sensitive_tools = [
     create_order,
+    register_user,
+    login_user,
+    logout_user,
+    update_user,
+    delete_user,
+    create_expense,
+    get_expense,
+    update_expense,
+    delete_expense,
+    create_expense_category,
+    get_expense_category,
+    update_expense_category,
+    delete_expense_category,
+    create_investment,
+    get_investment,
+    update_investment,
+    delete_investment,
+    create_goal,
+    get_goal,
+    update_goal,
+    delete_goal,
+    create_income,
+    get_income,
+    update_income,
+    delete_income,
+    create_project,
+    get_project,
+    update_project,
+    delete_project,
+    create_board,
+    get_board,
+    update_board,
+    delete_board,
+    create_column,
+    get_column,
+    update_column,
+    delete_column,
+    create_task,
+    get_task,
+    update_task,
+    delete_task,
+    send_chat_message,
+    get_session_state,
+    reset_session,
 ]
 
 sensitive_tool_names = {tool.name for tool in sensitive_tools}

@@ -1,4 +1,4 @@
-# Virtual Sales Agent powered by LangGraph, Streamlit & Gemini Flash
+# Virtual Sales Agent powered by LangGraph, Streamlit & OpenAI
 
 This project implements a **Virtual Sales Agent** that simulates customer interactions, providing information and support through a Streamlit interface. Using the power of **LangChain**, **LangGraph**, and a SQLite database, this agent can answer product questions, create orders, check order statuses, and offer personalized recommendations. These tools are divided into safe and sensitive categories. For sensitive tools, such as creating orders, a human-in-the-loop mechanism is implemented, requiring approval or denial before proceeding.
 
@@ -62,7 +62,7 @@ This Virtual Sales Agent is ideal for:
 - **LangGraph:** Enables the creation of sophisticated, stateful agent workflows.
 - **SQLite:** A lightweight database for managing product data and orders.
 - **Streamlit:** Facilitates the development of interactive web applications for the agent interface.
-- **Gemini Flash 2.0:** A fast and efficient large language model from Google for natural language understanding.
+- **OpenAI GPT-4o:** A powerful large language model for natural language understanding and generation.
 
 ---
 
@@ -143,7 +143,7 @@ Follow these steps to set up and run the Virtual Sales Agent:
 4. **Environment Configuration:**
    - Rename the `.env-example` file to `.env`.
    - Set up your API keys:
-     - **Google Gemini Flash:** Requires a `GOOGLE_API_KEY`, along with your `GOOGLE_APPLICATION_CREDENTIALS` (path to your credentials file), `GCP_PROJECT_ID` and `REGION`. Obtain these from your Google Cloud Platform (GCP) account at [Google AI Studio](https://aistudio.google.com/).
+     - **OpenAI:** Requires an `OPENAI_API_KEY`. Obtain this from your [OpenAI account](https://platform.openai.com/).
      - **LangSmith:** Create a [LangSmith](https://smith.langchain.com/) account and get your `LANGCHAIN_API_KEY`. This is for monitoring and debugging agent interactions.
    - Load environment variables:
      ```bash
@@ -166,7 +166,7 @@ Follow these steps to set up and run the Virtual Sales Agent:
 
 ## Contributing
 
-We welcome contributions to improve this project! Here’s how you can help:
+We welcome contributions to improve this project! Here's how you can help:
 1. Fork the repository and create a feature branch.
 2. Follow Python best practices (e.g., PEP 8).
 3. Submit a pull request with a clear description of your changes.
@@ -179,7 +179,7 @@ We welcome contributions to improve this project! Here’s how you can help:
 - [LangChain Documentation](https://python.langchain.com/docs/introduction/)
 - [LangGraph Documentation](https://langchain-ai.github.io/langgraph/tutorials/introduction/)
 - [Streamlit Documentation](https://docs.streamlit.io)
-- [Google Gemini Flash](https://aistudio.google.com/)
+- [OpenAI Documentation](https://platform.openai.com/docs)
 
 ---
 
